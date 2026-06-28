@@ -8,11 +8,13 @@ export const RegisterUser = async (req, res, next) => {
     if (!fullName || !email || !password || !dob || !phone || !gender) {
       const error = new Error("All Fields are required");
       error.statusCode = 400;
-      return next(error)
+      return next(error);
     }
     console.log(req.body);
 
     const existingUser = await User.findOne({ email });
+
+
 
     if (existingUser) {
       const error = new Error("User Already with same gmail");
