@@ -19,6 +19,7 @@ function FeaturedRestaurants() {
       </div>
     </section>
   );
+  
 }
 
 export default FeaturedRestaurants;
