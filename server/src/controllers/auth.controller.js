@@ -21,8 +21,7 @@ export const RegisterUser = async (req, res, next) => {
       error.statusCode = 409;
       return next(error)
     }
-
-    const photoUrl = `placehold.co/600x400?text=${fullName.charAt(0).toUpperCase()}`;
+const photoUrl = `https://placehold.co/600x400?text=${fullName.charAt(0).toUpperCase()}`;
 
     const profilePic = {
       url: photoUrl,
@@ -32,6 +31,15 @@ export const RegisterUser = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, SALT);
 
+    console.log({
+  fullName,
+  email,
+  phone,
+  dob,
+  gender,
+  password: hashedPassword,
+  profilePic,
+});
     //Create new User in database
     const user = await User.create({
       fullName,
@@ -43,10 +51,11 @@ export const RegisterUser = async (req, res, next) => {
       profilePic
     });
 
+    console.log("User Saved Successfully");
     console.log(user);
     res.status(201).json({ message: "User created successfully" })
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     next(error);
   }
 };
@@ -83,11 +92,16 @@ export const LoginUser = async (req, res, next) => {
     });
 
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     next(error);
   }
 };
 
-export const LogoutUser = (req, res) => {
-  res.json({ message: "Logout Successful from Controller" })
+export const LogoutUser = async (req, res, next) => {
+  try {
+    //Controller Logic
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };

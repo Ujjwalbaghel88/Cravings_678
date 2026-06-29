@@ -1,14 +1,19 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import bgImage from "../assets/images/foodTable.png";
+import api from "../config/api.config.js";
 
 function Register() {
+  const navigate = useNavigate();
   const [registerData, setRegisterData] = useState({
     role: "Customer",
     fullName: "",
     email: "",
     phone: "",
     password: "",
+    gender: "",
+    dob: "",
     confirmPassword: "",
     termsAccepted: false,
   });
@@ -32,7 +37,9 @@ function Register() {
       !registerData.email ||
       !registerData.phone ||
       !registerData.password ||
-      !registerData.confirmPassword
+      !registerData.confirmPassword ||
+      !registerData.dob ||
+      !registerData.gender
     ) {
       setValidateError("Please fill all fields");
       return;
@@ -56,12 +63,18 @@ function Register() {
       email: registerData.email.toLowerCase(),
       phone: registerData.phone,
       password: registerData.password,
+      dob: registerData.dob,
+      gender: registerData.gender,
     };
 
-    console.log("Register Data:", payload);
-
-    // API Call Here
-    // await registerUser(payload);
+    try {
+      const res = await api.post("/auth/register", payload);
+      alert(res.data.message);
+      navigate("/login");
+    } catch (error) {
+      console.error(error.response?.data?.message || error.message);
+      alert(error.response?.data?.message || error.message);
+    }
   };
 
   return (
@@ -134,6 +147,28 @@ function Register() {
               value={registerData.phone}
               onChange={handleChange}
               placeholder="Enter your phone number"
+              className="mb-2 w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-orange-500"
+            />
+
+            {/* Gender */}
+            <select
+              name="gender"
+              value={registerData.gender}
+              onChange={handleChange}
+              className="mb-2 w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-orange-500"
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+
+            {/* DOB */}
+            <input
+              type="date"
+              name="dob"
+              value={registerData.dob}
+              onChange={handleChange}
               className="mb-2 w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-orange-500"
             />
 
