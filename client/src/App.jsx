@@ -18,6 +18,9 @@ function App() {
 
         <Route path="/register" element={<Register />} />
         <Route path="/contact-us" element={<ContactUs />} />
+
+        {/* //Dashboard  Routes  */}
+          <Route path="/user/dashboard" element={<UserDashboard />} />
       </Routes>
       <Footer />
     </>

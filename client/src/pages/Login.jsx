@@ -34,6 +34,19 @@ function Login() {
       password: loginData.password,
     };
 
+    try {
+      const res = await api.post("/auth/login", payload);
+      toast.success(res.data.message);
+      sessionStorage.setItem("UserData",JSON.stringify(res.data.data));
+
+      navigate("/user/dashboard");
+    } catch (error) {
+      toast.error(
+        error.response?.status + " | " + error.response?.data?.message ||
+          error.message
+      );
+    }
+
     console.log("Login Data:", payload);
 
     // API Call Here
