@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ContactUs from "./pages/ContactUs";
 import { Toaster } from "react-hot-toast";
-import UserDashboard from "./pages/dashboard/userDashboard";
+import UserDashboard from "./pages/dashboard/UserDashboard";
 
 function App() {
   return (

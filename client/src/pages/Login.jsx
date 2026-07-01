@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import bgImage from "../assets/images/foodTable.png";
 import toast from "react-hot-toast";
-import api from "../config/api.config"
+import api from "../config/api.config";
 
 function Login() {
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
