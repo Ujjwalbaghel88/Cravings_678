@@ -1,33 +1,33 @@
 
-import React from "react";
-const AuthContext = React.createContext();
+import React, { useState, useEffect, useContext } from "react";
+
+const AuthContext = React.createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState();
-    const [isLogin, setIsLogin] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
 
+  useEffect(() => {
+    setIsLogin(Boolean(user));
+  }, [user]);
 
-    useEffect(() => {
-        // if (user) {
-        //     setIsLogin(true);
+  const value = {
+    user,
+    setUser,
+    isLogin,
+    setIsLogin,
+  };
 
-        // } else {
-        //     setIsLogin(false);
-        // }
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
 
-        setIsLogin(!!user);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
 
-    }, [user]);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
 
-
-    const value = {
-        user, setUser, isLogin, setIsLogin
-    }
-
-    return <AuthContext.Provider value={value}>
-        {children}
-    </AuthContext.Provider>;
-}
-
- export const useAuth = () =>  useContext(AuthContext);
+  return context;
+};
 

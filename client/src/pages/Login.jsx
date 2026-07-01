@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import bgImage from "../assets/images/foodTable.png";
 import toast from "react-hot-toast";
 import api from "../config/api.config";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
+  const {setUser, setIsLogin} = useAuth();
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
@@ -25,7 +27,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!loginData.email || !loginData.password) {
+    if (!loginData.email.trim() || !loginData.password.trim()) {
       setValidateError("Please fill all fields");
       return;
     }
@@ -33,27 +35,32 @@ function Login() {
     setValidateError("");
 
     const payload = {
-      email: loginData.email.toLowerCase(),
+      email: loginData.email.trim().toLowerCase(),
       password: loginData.password,
     };
 
     try {
       const res = await api.post("/auth/login", payload);
-      toast.success(res.data.message);
-      sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
+      const userData = res?.data?.data ?? null;
 
+      toast.success(res?.data?.message || "Login successful");
+
+      if (userData) {
+        sessionStorage.setItem("UserData", JSON.stringify(userData));
+      }
+
+      setUser(userData);
+      setIsLogin(true);
       navigate("/user/dashboard");
     } catch (error) {
-      toast.error(
-        error.response.status + " | " + error.response?.data?.message ||
-        error.message,
-      );
-    }
-    
-    console.log("Login Data:", payload);
+      const errorMessage =
+        error?.response?.data?.message || error?.message || "Login failed";
+      const statusText = error?.response?.status
+        ? `${error.response.status} | `
+        : "";
 
-    // API Call Here
-    // await loginUser(payload);
+      toast.error(`${statusText}${errorMessage}`);
+    }
   };
 
   return (
