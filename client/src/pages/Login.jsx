@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import bgImage from "../assets/images/foodTable.png";
+import toast from "react-hot-toast";
+import api from "../config/api.config"
 
 function Login() {
   const [loginData, setLoginData] = useState({
@@ -37,16 +39,16 @@ function Login() {
     try {
       const res = await api.post("/auth/login", payload);
       toast.success(res.data.message);
-      sessionStorage.setItem("UserData",JSON.stringify(res.data.data));
+      sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
 
       navigate("/user/dashboard");
     } catch (error) {
       toast.error(
-        error.response?.status + " | " + error.response?.data?.message ||
-          error.message
+        error.response.status + " | " + error.response?.data?.message ||
+        error.message,
       );
     }
-
+    
     console.log("Login Data:", payload);
 
     // API Call Here
